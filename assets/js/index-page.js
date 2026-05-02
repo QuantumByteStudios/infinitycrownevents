@@ -1,6 +1,20 @@
-// assets/js/index-page.js — Infinity Crown Events home page UI (navbar toggler, sidebar, overlay). Static site; no PHP.
+// assets/js/index-page.js — Infinity Crown Events home page UI (navbar, sidebar, gallery lightbox, contact redirect notice).
 
 document.addEventListener("DOMContentLoaded", () => {
+	const notice = document.getElementById("contact-form-notice");
+	const inquiry = new URLSearchParams(window.location.search).get("inquiry");
+	if (notice && (inquiry === "sent" || inquiry === "error")) {
+		notice.classList.remove("d-none");
+		notice.textContent =
+			inquiry === "sent"
+				? "Thank you — we received your message and will reply soon."
+				: "We could not send your message from the server. Please call or email us directly.";
+		notice.classList.add(inquiry === "sent" ? "text-success" : "text-danger");
+		const path = window.location.pathname;
+		const hash = window.location.hash || "#contact";
+		window.history.replaceState({}, "", path + hash);
+	}
+
 	const navbarTogglerNine = document.querySelector(".navbar-nine .navbar-toggler");
 	if (navbarTogglerNine) {
 		navbarTogglerNine.addEventListener("click", () => {
